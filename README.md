@@ -38,8 +38,7 @@ Searches the live web and returns structured ranked results with titles, snippet
 - Domain include/exclude filters
 - Recency and date filters
 - Academic publication-year filters
-- Pagination (`page`)
-- Deep mode with parallel consecutive page requests (`rounds`, default 3, maximum 10)
+- Deep mode with parallel consecutive page requests from the first page (`rounds`, default 3, maximum 10)
 
 ### `tinyfish_wallet`
 

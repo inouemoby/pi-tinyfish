@@ -241,17 +241,15 @@ export default function (pi: ExtensionAPI) {
 			domain_type: Type.Optional(StringEnum(["web", "news", "research_paper"] as const, { description: "Restrict results to web, news, or research papers" })),
 			pub_year_min: Type.Optional(Type.Integer({ description: "Minimum publication year" })),
 			pub_year_max: Type.Optional(Type.Integer({ description: "Maximum publication year" })),
-			page: Type.Optional(Type.Integer({ description: "Starting 0-based result page; default 0, maximum 10", minimum: 0, maximum: 10 })),
 			include_thumbnail: Type.Optional(Type.Boolean({ description: "Include thumbnail_url when available" })),
 			fetch_config: Type.Optional(Type.String({ description: "JSON-encoded fetch configuration object, maximum 256 characters" })),
 		}),
 		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
-			const firstPage = params.page ?? 0;
+			const firstPage = 0;
 			const deep = (params.mode ?? "deep") === "deep";
 			const pageCount = deep ? (params.rounds ?? 3) : 1;
-			if (firstPage < 0 || firstPage > 10) throw new Error("page must be between 0 and 10");
-			if (pageCount < 1 || pageCount > 10 || firstPage + pageCount > 11) {
-				throw new Error("rounds must be between 1 and 10, and the requested pages must stay within 0..10");
+			if (pageCount < 1 || pageCount > 10) {
+				throw new Error("rounds must be between 1 and 10");
 			}
 
 			const searchPage = async (pageNumber: number) => {
@@ -320,7 +318,6 @@ export default function (pi: ExtensionAPI) {
 				args.domain_type ? `domain_type=${args.domain_type}` : undefined,
 				args.pub_year_min !== undefined ? `pub_year_min=${args.pub_year_min}` : undefined,
 				args.pub_year_max !== undefined ? `pub_year_max=${args.pub_year_max}` : undefined,
-				args.page !== undefined ? `page=${args.page}` : undefined,
 			].filter(Boolean).join(" ");
 			const label = `${args.query}${mode}${filters ? ` ${filters}` : ""}`;
 			return new Text(theme.fg("toolTitle", theme.bold("tinyfish_search ")) + theme.fg("dim", label), 0, 0);
