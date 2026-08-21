@@ -34,7 +34,7 @@ The key is stored in `~/.pi/agent/auth.json` and reused across sessions. The env
 
 ## What It Does
 
-This extension registers five TinyFish tools:
+This extension registers three TinyFish tools:
 
 ### `tinyfish_search`
 
@@ -55,9 +55,9 @@ Checks the authenticated wallet balance and billing status through the native `G
 
 Fetches and extracts content from known URLs. Supports all Fetch request fields: up to 10 URLs, Markdown/HTML/JSON output, purpose, links, image links, cache TTL, per-URL timeout, conditional ETag/Last-Modified requests, validator capture, and CSS selectors.
 
-### `tinyfish_agent`
+### `tinyfish_agent` (disabled)
 
-Runs a TinyFish Web Agent against a real website. Give it a starting URL and a natural-language goal; it can navigate pages, click controls, enter text, handle dynamic content, paginate, and return structured results. Supports:
+The Web Agent implementation is retained in the source code but is currently commented out and not registered as a Pi tool. Its previous capabilities included:
 
 - Blocking, async, and SSE native Agent endpoints
 - Lite and stealth browser profiles
@@ -70,9 +70,9 @@ Runs a TinyFish Web Agent against a real website. Give it a starting URL and a n
 
 Use this for workflows that require interaction, login, judgment, or multiple browser steps.
 
-### `tinyfish_browser_session`
+### `tinyfish_browser_session` (disabled)
 
-Manages the complete browser-session lifecycle in one tool. Use `action: "create"` to create a managed Chromium session and return connection details for Playwright, Puppeteer, or CDP automation, or `action: "close"` with `session_id` to terminate it. Supports the native startup URL, inactivity timeout, and browser profile. The documented Browser API does not expose a list/count-all-sessions endpoint; session IDs must be tracked by the caller.
+The Browser Session implementation is retained in the source code but is currently commented out and not registered as a Pi tool.
 
 ## Usage Examples
 
