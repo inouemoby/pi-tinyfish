@@ -201,23 +201,15 @@ function joinDomains(values?: string[]): string | undefined {
 }
 
 export default function (pi: ExtensionAPI) {
-	// TinyFish is exposed as a Pi provider so its API key uses Pi's unified
-	// /login and /logout flow. The placeholder model makes the provider visible
-	// to the login selector; web work is performed by the tools below.
+	// Register TinyFish only for Pi's unified /login and /logout provider auth.
+	// TinyFish is a tools API, not a chat-model provider, so it intentionally
+	// registers no models and must not appear in the model selector.
 	pi.registerProvider("tinyfish", {
 		name: "TinyFish",
 		baseUrl: "https://agent.tinyfish.ai/v1",
 		apiKey: "$TINYFISH_API_KEY",
 		api: "openai-completions",
-		models: [{
-			id: "web-agent-tools",
-			name: "TinyFish Web Agent Tools",
-			reasoning: false,
-			input: ["text"],
-			cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-			contextWindow: 1,
-			maxTokens: 1,
-		}],
+		models: [],
 	});
 
 	pi.registerTool({
