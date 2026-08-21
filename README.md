@@ -17,11 +17,11 @@ After installation, restart pi or run `/reload`.
 Configure your API key with Pi's unified login command:
 
 ```text
-/login
-→ Select "TinyFish"
-→ Select "Sign in with an API key"
-→ Enter the TinyFish API key
+/login tinyfish
+→ Enter the TinyFish API key when prompted
 ```
+
+You can also run `/login`, search for `TinyFish`, select it, and enter the key.
 
 The key is stored in `~/.pi/agent/auth.json` and reused across sessions. The environment variable `TINYFISH_API_KEY` is also supported and takes priority. Use `/logout` to remove the stored key.
 
