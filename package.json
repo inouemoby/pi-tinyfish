@@ -1,0 +1,15 @@
+{
+  "name": "pi-tinyfish",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TinyFish Search, Fetch, Web Agent, and Browser tools for pi coding agent",
+  "keywords": ["pi-package"],
+  "pi": {
+    "extensions": ["./index.ts"]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  }
+}
