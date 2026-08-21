@@ -433,6 +433,7 @@ export default function (pi: ExtensionAPI) {
 		},
 	});
 
+	/*
 	pi.registerTool({
 		name: "tinyfish_agent",
 		label: "Web Agent",
@@ -539,7 +540,9 @@ export default function (pi: ExtensionAPI) {
 			return new Text(theme.fg(status.toUpperCase() === "COMPLETED" ? "success" : "warning", `✓ Agent ${status.toLowerCase()} — final result available`), 0, 0);
 		},
 	});
+	*/
 
+	/*
 	pi.registerTool({
 		name: "tinyfish_browser_session",
 		label: "Browser Session",
@@ -617,5 +620,6 @@ export default function (pi: ExtensionAPI) {
 			return new Text(theme.fg("success", action === "close" ? "✓ Browser session terminated" : "✓ Browser session created"), 0, 0);
 		},
 	});
+	*/
 
 }
