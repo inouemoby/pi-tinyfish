@@ -214,7 +214,7 @@ export default function (pi: ExtensionAPI) {
 
 	pi.registerTool({
 		name: "tinyfish_search",
-		label: "TinyFish Search",
+		label: "Web Search",
 		description:
 			"Search the entire live web for current information, news, discussions, documentation, and other web content. " +
 			"Use this for factual or time-sensitive questions before answering. Defaults to deep mode with parallel " +
@@ -234,7 +234,7 @@ export default function (pi: ExtensionAPI) {
 			purpose: Type.Optional(Type.String({ description: "Short explanation of what the search is for" })),
 			location: Type.Optional(Type.String({ description: "Country code, e.g. US, GB, JP" })),
 			language: Type.Optional(Type.String({ description: "Result language code, e.g. en, zh, ja" })),
-			include_domains: Type.Optional(Type.Array(Type.String({ description: "Only return results from these domains, e.g. docs.tinyfish.ai" }))),
+			include_domains: Type.Optional(Type.Array(Type.String({ description: "Only return results from these domains, e.g. example.com" }))),
 			exclude_domains: Type.Optional(Type.Array(Type.String({ description: "Exclude results from these domains" }))),
 			recency_minutes: Type.Optional(Type.Integer({ description: "Only return results published within the last N minutes", minimum: 1 })),
 			after_date: Type.Optional(Type.String({ description: "Only return results on or after this date (YYYY-MM-DD)" })),
@@ -335,7 +335,7 @@ export default function (pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "tinyfish_wallet",
 		label: "TinyFish Wallet",
-		description: "Check the authenticated TinyFish wallet balance and billing status using the native GET /v1/wallet endpoint. Legacy accounts may return FEATURE_NOT_AVAILABLE.",
+		description: "Check the authenticated TinyFish wallet balance and billing status.",
 		promptSnippet: "Check TinyFish wallet balance",
 		parameters: Type.Object({}),
 		async execute(_toolCallId, _params, signal, _onUpdate, ctx) {
@@ -357,7 +357,7 @@ export default function (pi: ExtensionAPI) {
 			};
 		},
 		renderCall(_args, theme) {
-			return new Text(theme.fg("toolTitle", theme.bold("tinyfish_wallet ")) + theme.fg("dim", "GET /v1/wallet"), 0, 0);
+			return new Text(theme.fg("toolTitle", theme.bold("tinyfish_wallet ")) + theme.fg("dim", "wallet status"), 0, 0);
 		},
 		renderResult(result, { isPartial }, theme) {
 			if (isPartial) return new Text(theme.fg("warning", "Checking TinyFish wallet..."), 0, 0);
@@ -370,11 +370,11 @@ export default function (pi: ExtensionAPI) {
 
 	pi.registerTool({
 		name: "tinyfish_fetch",
-		label: "TinyFish Fetch",
+		label: "Web Fetch",
 		description:
-			"Fetch and extract clean content from up to 10 known web URLs using TinyFish. " +
-			"Prefer this over a full Agent run when no clicking or login is needed. It is free but requires an API key.",
-		promptSnippet: "Fetch clean content from web URLs with TinyFish",
+			"Fetch and extract clean content from up to 10 known web URLs. " +
+			"Use this when you need to read page content without clicking, login, or other interaction.",
+		promptSnippet: "Fetch clean content from web URLs",
 		parameters: Type.Object({
 			urls: Type.Array(Type.String({ description: "One or more http(s) URLs to fetch; maximum 10" })),
 			purpose: Type.Optional(Type.String({ description: "Short explanation of what the fetch is for" })),
@@ -435,20 +435,20 @@ export default function (pi: ExtensionAPI) {
 
 	pi.registerTool({
 		name: "tinyfish_agent",
-		label: "TinyFish Web Agent",
+		label: "Web Agent",
 		description:
-			"Give TinyFish a URL and a natural-language goal; it runs a remote browser and completes multi-step web work. " +
-			"It may click, submit forms, use saved login state, and cause external side effects, so inspect the goal before calling. " +
-			"Always request a precise structured output when the result will be used programmatically.",
-		promptSnippet: "Delegate an interactive website task to TinyFish Web Agent",
+			"Complete a multi-step task on a real website from a starting URL and natural-language goal. " +
+			"The agent may click, submit forms, use saved login state, and cause external side effects, so inspect the goal before calling. " +
+			"Request precise structured output when the result will be used programmatically.",
+		promptSnippet: "Delegate an interactive website task",
 		parameters: Type.Object({
 			url: Type.String({ description: "Starting http(s) URL" }),
 			goal: Type.String({ description: "Natural-language task and desired output" }),
-			endpoint: Type.Optional(StringEnum(["run", "run-async", "run-sse"] as const, { description: "Native Agent endpoint; run returns the final result, async returns a run ID, sse streams events" })),
+			endpoint: Type.Optional(StringEnum(["run", "run-async", "run-sse"] as const, { description: "Execution mode: run waits for the result, async returns a run ID, sse streams progress" })),
 			browser_profile: Type.Optional(StringEnum(["lite", "stealth"] as const, { description: "Browser profile; lite is faster, stealth is more evasive" })),
 			proxy_config: Type.Optional(Type.Object({
 				enabled: Type.Optional(Type.Boolean({ description: "Enable proxying for the run" })),
-				type: Type.Optional(StringEnum(["tetra", "custom"] as const, { description: "TinyFish proxy infrastructure or a custom proxy" })),
+				type: Type.Optional(StringEnum(["tetra", "custom"] as const, { description: "Proxy infrastructure or a custom proxy" }))
 				country_code: Type.Optional(StringEnum(["US", "GB", "CA", "DE", "FR", "JP", "AU"] as const, { description: "Proxy country for tetra routing" })),
 				url: Type.Optional(Type.String({ description: "Custom proxy URL" })),
 				username: Type.Optional(Type.String({ description: "Custom proxy username" })),
@@ -461,15 +461,15 @@ export default function (pi: ExtensionAPI) {
 			})),
 			webhook_url: Type.Optional(Type.String({ description: "HTTPS URL for run lifecycle notifications" })),
 			capture_config: Type.Optional(Type.Object({
-				screenshots: Type.Optional(Type.Boolean({ description: "Capture screenshots; account-gated" })),
-				recording: Type.Optional(Type.Boolean({ description: "Capture a run recording; account-gated" })),
-				html: Type.Optional(Type.Boolean({ description: "Capture HTML artifacts; account-gated" })),
-				snapshots: Type.Optional(Type.Boolean({ description: "Capture page snapshots; account-gated" })),
-				elements: Type.Optional(Type.Boolean({ description: "Capture element artifacts; account-gated" })),
+				screenshots: Type.Optional(Type.Boolean({ description: "Capture screenshots" })),
+				recording: Type.Optional(Type.Boolean({ description: "Capture a run recording" })),
+				html: Type.Optional(Type.Boolean({ description: "Capture HTML artifacts" })),
+				snapshots: Type.Optional(Type.Boolean({ description: "Capture page snapshots" })),
+				elements: Type.Optional(Type.Boolean({ description: "Capture element artifacts" })),
 			})),
 			use_profile: Type.Optional(Type.Boolean({ description: "Reuse a saved authenticated Browser Context Profile" })),
 			profile_id: Type.Optional(Type.String({ description: "Saved Browser Context Profile ID" })),
-			use_vault: Type.Optional(Type.Boolean({ description: "Use TinyFish Vault credentials for login" })),
+			use_vault: Type.Optional(Type.Boolean({ description: "Use saved credentials for login" })),
 			credential_item_ids: Type.Optional(Type.Array(Type.String({ description: "Credential URIs allowed for this run" }))),
 			output_schema: Type.Optional(Type.Record(Type.String(), Type.Any(), { description: "JSON Schema for the returned result" })),
 			// Backward-compatible aliases; native callers should use agent_config.
@@ -542,12 +542,12 @@ export default function (pi: ExtensionAPI) {
 
 	pi.registerTool({
 		name: "tinyfish_browser_session",
-		label: "TinyFish Browser Session",
+		label: "Browser Session",
 		description:
-			"Manage a TinyFish Chromium session in one tool: list locally tracked sessions, create a session and return its CDP connection URL, " +
-			"or terminate an existing session by ID. Use the CDP URL with Playwright/Puppeteer/CDP to control the browser; " +
-			"use tinyfish_agent for AI-driven interaction. The list is local and cannot discover sessions created elsewhere.",
-		promptSnippet: "Create, control, or terminate a TinyFish browser session",
+			"Manage a browser session in one tool: list locally tracked sessions, create a session and return its CDP connection URL, " +
+			"or terminate an existing session by ID. Use the CDP URL with Playwright, Puppeteer, or another CDP client to control the browser. " +
+			"The list is local and cannot discover sessions created elsewhere.",
+		promptSnippet: "Create, control, or terminate a browser session",
 		parameters: Type.Object({
 			action: Type.Optional(StringEnum(["list", "create", "close"] as const, { description: "List tracked sessions, create a session, or close an existing session; default create" })),
 			url: Type.Optional(Type.String({ description: "Initial http(s) URL when creating a session" })),
