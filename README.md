@@ -18,7 +18,7 @@ Configure your API key with Pi's unified login command:
 
 ```text
 /login
-→ Select "Use an API key"
+→ Select "Sign in with an API key"
 → Select "TinyFish"
 → Enter the TinyFish API key
 ```
