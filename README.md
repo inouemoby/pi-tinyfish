@@ -34,7 +34,7 @@ The key is stored in `~/.pi/agent/auth.json` and reused across sessions. The env
 
 ## What It Does
 
-This extension registers three TinyFish tools:
+This extension registers two TinyFish tools:
 
 ### `tinyfish_search`
 
@@ -47,9 +47,9 @@ Searches the live web and returns structured ranked results with titles, snippet
 - Academic publication-year filters
 - Deep mode with parallel consecutive page requests from the first page (`rounds`, default 3, maximum 10)
 
-### `tinyfish_wallet`
+### `tinyfish_wallet` (disabled)
 
-Checks the authenticated wallet balance and billing status through the native `GET /v1/wallet` endpoint. Legacy accounts may return `FEATURE_NOT_AVAILABLE`.
+The wallet implementation is retained in the source code but is currently commented out and not registered as a Pi tool.
 
 ### `tinyfish_fetch`
 

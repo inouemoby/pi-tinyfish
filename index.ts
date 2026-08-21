@@ -332,6 +332,7 @@ export default function (pi: ExtensionAPI) {
 		},
 	});
 
+	/*
 	pi.registerTool({
 		name: "tinyfish_wallet",
 		label: "TinyFish Wallet",
@@ -367,6 +368,7 @@ export default function (pi: ExtensionAPI) {
 			return new Text(theme.fg("success", balance === undefined ? "✓ Wallet status received" : `✓ Balance: ${balance} ${currency}`.trim()), 0, 0);
 		},
 	});
+	*/
 
 	pi.registerTool({
 		name: "tinyfish_fetch",
