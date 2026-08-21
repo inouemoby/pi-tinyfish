@@ -1,6 +1,16 @@
 # pi-tinyfish
 
-Register [TinyFish](https://tinyfish.ai) web services as tools for pi coding agent. TinyFish provides live web search, page extraction, AI browser automation, and managed browser sessions for agent workflows.
+Register [TinyFish](https://tinyfish.ai) web services as tools for pi coding agent. TinyFish provides live web search, page extraction, AI browser automation, managed browser sessions, wallet status, and optional TinyFish MCP access.
+
+## Install
+
+Install the cloud version from GitHub:
+
+```bash
+pi install git:github.com/inouemoby/pi-tinyfish
+```
+
+After installation, restart pi or run `/reload`.
 
 ## Setup
 
