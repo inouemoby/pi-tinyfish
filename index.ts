@@ -216,15 +216,16 @@ export default function (pi: ExtensionAPI) {
 		name: "tinyfish_search",
 		label: "TinyFish Search",
 		description:
-			"Search the live web through TinyFish and return ranked structured results. " +
-			"Defaults to deep mode: it requests consecutive TinyFish result pages in parallel. " +
-			"Use simple mode for one page. Supports site:domain and -site:domain query operators, " +
-			"include_domains, and exclude_domains. This API is free but requires a TinyFish API key.",
-		promptSnippet: "Search the live web with TinyFish",
+			"Search the entire live web for current information, news, discussions, documentation, and other web content. " +
+			"Use this for factual or time-sensitive questions before answering. Defaults to deep mode with parallel " +
+			"consecutive pages; use simple mode for one page. Supports site operators, domain include/exclude, " +
+			"and optional date, location, language, and content-type filters.",
+		promptSnippet: "Search the web for current information",
 		promptGuidelines: [
-			"Use tinyfish_search as the default live-web search tool when current web information is needed.",
-			"tinyfish_search defaults to deep mode and requests 3 consecutive result pages; use mode=\"simple\" for one page.",
-			"Use tinyfish_search include_domains/exclude_domains or site:domain/-site:domain query operators for site filtering.",
+			"Use tinyfish_search as the default for factual, current, or time-sensitive questions; search before answering.",
+			"It searches the entire web, including news, forums, documentation, blogs, and other public web content.",
+			"Deep mode is the default and requests 3 consecutive result pages in parallel; use mode=\"simple\" for one page.",
+			"Use site:domain/-site:domain or include_domains/exclude_domains for site filtering; location and language filters are also available.",
 		],
 		parameters: Type.Object({
 			query: Type.String({ description: "Search query. Supports site:domain and -site:domain operators." }),
