@@ -224,13 +224,13 @@ export default function (pi: ExtensionAPI) {
 		promptGuidelines: [
 			"Use tinyfish_search as the default for factual, current, or time-sensitive questions; search before answering.",
 			"It searches the entire web, including news, forums, documentation, blogs, and other public web content.",
-			"Deep mode is the default and requests 3 consecutive result pages in parallel; use mode=\"simple\" for one page.",
+			"Deep mode is the default and requests 2 consecutive result pages in parallel; use mode=\"simple\" for one page.",
 			"Use site:domain/-site:domain or include_domains/exclude_domains for site filtering; location and language filters are also available.",
 		],
 		parameters: Type.Object({
 			query: Type.String({ description: "Search query. Supports site:domain and -site:domain operators." }),
 			mode: Type.Optional(StringEnum(["deep", "simple"] as const, { description: "deep requests multiple pages in parallel; simple requests one page" })),
-			rounds: Type.Optional(Type.Integer({ description: "Number of consecutive pages in deep mode; default 3, maximum 10", minimum: 1, maximum: 10 })),
+			rounds: Type.Optional(Type.Integer({ description: "Number of consecutive pages in deep mode; default 2, maximum 10", minimum: 1, maximum: 10 })),
 			purpose: Type.Optional(Type.String({ description: "Short explanation of what the search is for" })),
 			location: Type.Optional(Type.String({ description: "Country code, e.g. US, GB, JP" })),
 			language: Type.Optional(Type.String({ description: "Result language code, e.g. en, zh, ja" })),
@@ -248,7 +248,7 @@ export default function (pi: ExtensionAPI) {
 		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
 			const firstPage = 0;
 			const deep = (params.mode ?? "deep") === "deep";
-			const pageCount = deep ? (params.rounds ?? 3) : 1;
+			const pageCount = deep ? (params.rounds ?? 2) : 1;
 			if (pageCount < 1 || pageCount > 10) {
 				throw new Error("rounds must be between 1 and 10");
 			}
@@ -307,7 +307,7 @@ export default function (pi: ExtensionAPI) {
 			};
 		},
 		renderCall(args, theme) {
-			const mode = args.mode === "simple" ? " [simple]" : ` [deep ×${args.rounds ?? 3}]`;
+			const mode = args.mode === "simple" ? " [simple]" : ` [deep ×${args.rounds ?? 2}]`;
 			const filters = [
 				args.include_domains?.length ? `include_domains=${args.include_domains.join(",")}` : undefined,
 				args.exclude_domains?.length ? `exclude_domains=${args.exclude_domains.join(",")}` : undefined,
