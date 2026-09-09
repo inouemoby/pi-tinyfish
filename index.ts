@@ -217,20 +217,21 @@ export default function (pi: ExtensionAPI) {
 		label: "Web Search",
 		description:
 			"Search the entire live web for current information, news, discussions, documentation, and other web content. " +
-			"Use this for factual or time-sensitive questions before answering. Defaults to deep mode with parallel " +
-			"consecutive pages; use simple mode for one page. Supports site operators, domain include/exclude, " +
-			"and optional date, location, language, and content-type filters.",
+			"Use this for factual or time-sensitive questions before answering. Prefer simple mode for routine lookups; " +
+			"use deep mode with rounds=2 only when broader coverage is needed. Do not increase rounds or add optional " +
+			"filters unless the task clearly requires them.",
 		promptSnippet: "Search the web for current information",
 		promptGuidelines: [
 			"Use tinyfish_search as the default for factual, current, or time-sensitive questions; search before answering.",
 			"It searches the entire web, including news, forums, documentation, blogs, and other public web content.",
-			"Deep mode is the default and requests 2 consecutive result pages in parallel; use mode=\"simple\" for one page.",
-			"Use site:domain/-site:domain or include_domains/exclude_domains for site filtering; location and language filters are also available.",
+			"Prefer mode=\"simple\" for routine lookups. Use mode=\"deep\" with rounds=2 only when broader coverage is needed.",
+			"Do not set rounds above 2 unless the task clearly needs additional coverage.",
+			"Do not pass optional filters such as domains, dates, recency, location, language, content type, publication years, thumbnails, or fetch configuration unless they are necessary for the task.",
 		],
 		parameters: Type.Object({
 			query: Type.String({ description: "Search query. Supports site:domain and -site:domain operators." }),
-			mode: Type.Optional(StringEnum(["deep", "simple"] as const, { description: "deep requests multiple pages in parallel; simple requests one page" })),
-			rounds: Type.Optional(Type.Integer({ description: "Number of consecutive pages in deep mode; default 2, maximum 10", minimum: 1, maximum: 10 })),
+			mode: Type.Optional(StringEnum(["deep", "simple"] as const, { description: "Prefer simple for routine lookups; use deep for broader coverage" })),
+			rounds: Type.Optional(Type.Integer({ description: "Deep-mode page count; prefer 2 and do not exceed it unless necessary, maximum 10", minimum: 1, maximum: 10 })),
 			purpose: Type.Optional(Type.String({ description: "Short explanation of what the search is for" })),
 			location: Type.Optional(Type.String({ description: "Country code, e.g. US, GB, JP" })),
 			language: Type.Optional(Type.String({ description: "Result language code, e.g. en, zh, ja" })),
@@ -247,7 +248,7 @@ export default function (pi: ExtensionAPI) {
 		}),
 		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
 			const firstPage = 0;
-			const deep = (params.mode ?? "deep") === "deep";
+			const deep = (params.mode ?? "simple") === "deep";
 			const pageCount = deep ? (params.rounds ?? 2) : 1;
 			if (pageCount < 1 || pageCount > 10) {
 				throw new Error("rounds must be between 1 and 10");
@@ -307,7 +308,7 @@ export default function (pi: ExtensionAPI) {
 			};
 		},
 		renderCall(args, theme) {
-			const mode = args.mode === "simple" ? " [simple]" : ` [deep ×${args.rounds ?? 2}]`;
+			const mode = (args.mode ?? "simple") === "simple" ? " [simple]" : ` [deep ×${args.rounds ?? 2}]`;
 			const filters = [
 				args.include_domains?.length ? `include_domains=${args.include_domains.join(",")}` : undefined,
 				args.exclude_domains?.length ? `exclude_domains=${args.exclude_domains.join(",")}` : undefined,
